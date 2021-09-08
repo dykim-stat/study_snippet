@@ -6,8 +6,8 @@ from selenium.webdriver.common.action_chains import ActionChains
 import time, pickle, datetime
 import pandas as pd
 
-my_id = 'haedoji96'
-my_pw = 'dong0807!!'
+my_id = ''
+my_pw = ''
 
 
 
