@@ -6,8 +6,8 @@ from selenium.webdriver.common.action_chains import ActionChains
 import time, pickle, datetime
 import pandas as pd
 
-my_id = ''
-my_pw = ''
+my_id = 'haedoji96'
+my_pw = 'dong0807!!'
 
 
 
@@ -26,7 +26,7 @@ def initial_setting():
     
     driver = Chrome('chromedriver.exe')
     ## 로딩안되면 5초동안은 기다리기
-    driver.implicitly_wait(5)
+    driver.implicitly_wait(10)
 
     driver.get('https://www.skku.edu/skku/index.do#')
 
@@ -48,12 +48,14 @@ def initial_setting():
     driver.get('https://mail3.skku.edu/portal.nsf/menulist_new?readform&comtype=&selnodecode=&count=1000&menu=MAIL&expand=&node=2&content=/mail_h/haedoji96.nsf/view?readform&viewtitle=&dhxr1630651509134#')
     print('크롬드라이버 구동 완료')
 
+
 def read_gsheet():
     """ 구글 스프레드 링크로 불러오기 """
     sheet_id = '1OoH8lLDkNdNMQYCJOWjEWE1eI8N0sikyybh5ohPxMlk'
     url = f'https://docs.google.com/spreadsheets/d/{sheet_id}/gviz/tq?tqx=out:csv'
     dat = pd.read_csv(url)
     return dat
+
 
 def data_cleaning(df):
     """ 아웃풋 순서 (email, address, timestamp) """
@@ -102,18 +104,25 @@ def send_mail(email, address):
     .pause(2).send_keys(main_text).perform()
 
     ## 보내기 버튼 클릭
-    # my_click('//*[@id="GWpop"]/div[1]/div[1]/a[1]')
+    my_click('//*[@id="GWpop"]/div[1]/div[1]/a[1]')
+    time.sleep(0.5)
+    driver.switch_to_alert().accept()
+    driver.switch_to.window(driver.window_handles[1])
+
 
 def my_click(xpath):
     """ xpath 입력 시 해당 부분 클릭 """
     driver.find_element_by_xpath(xpath).click()
 
+
 def my_input(xpath, keyword):
     """ xpath랑 입력할 단어 """
     driver.find_element_by_xpath(xpath).send_keys(keyword)
 
+
 def now():
     return datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
 
 def main():
     count = 0 # 발송한 메일 수
@@ -135,6 +144,7 @@ def main():
         else:
             print(f'실시간 확인 중입니다. 새로운 신청이 없습니다. {now()}',end='\r')
         time.sleep(10)
+
 
 if __name__ == "__main__":
     main()
